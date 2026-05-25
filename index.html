@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curriculum Vitae</title>
+  <link rel="icon" type="image/x-icon" href="L-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== ADMIN TOOLBAR ===================== -->
+  <div id="admin-toolbar" class="admin-toolbar hidden">
+    <span class="admin-label">Admin Mode</span>
+    <button class="btn-admin" type="button" data-action="change-passphrase">Change Passphrase</button>
+    <button class="btn-admin btn-logout" id="btn-logout">Logout</button>
+  </div>
+
+  <!-- ===================== HEADER / PROFILE ===================== -->
+  <header id="header" class="site-header">
+    <div class="container header-inner">
+      <div class="avatar-wrap">
+        <img id="profile-avatar" src="" alt="Avatar" class="avatar"
+             onerror="this.onerror=null;this.src='default-avatar.jpg'" />
+      </div>
+      <div class="profile-info">
+        <div class="profile-heading-row">
+          <div>
+            <h1 id="profile-name" class="profile-name">Your Name</h1>
+            <p id="profile-title" class="profile-title">Job Title</p>
+          </div>
+          <button type="button" class="section-action-btn action-btn action-btn-edit" data-action="edit-profile" aria-label="Edit personal information">&#9998;</button>
+        </div>
+        <p id="profile-summary" class="profile-summary">A short summary about yourself goes here.</p>
+        <ul id="profile-contacts" class="contact-list">
+          <li><span class="contact-icon" aria-hidden="true">☏</span><a id="contact-phone" href="#">+84 000 000 000</a></li>
+          <li><span class="contact-icon" aria-hidden="true">✉&#xfe0e;</span><a id="contact-email" href="#">email@example.com</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main class="container main-content">
+
+    <!-- ---- SUMMARY SECTION ---- -->
+    <section id="section-summary" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Summary</h2>
+        <button type="button" class="section-action-btn action-btn action-btn-edit" data-action="edit-summary" aria-label="Edit summary section">&#9998;</button>
+      </div>
+      <div id="summary-content" class="section-body">
+        <p class="placeholder-text">Loading summary...</p>
+      </div>
+    </section>
+
+    <!-- ---- SKILLS SECTION ---- -->
+    <section id="section-skills" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Skills</h2>
+        <button type="button" class="section-action-btn action-btn action-btn-edit" data-action="edit-skills" aria-label="Edit skills">&#9998;</button>
+      </div>
+      <div id="skills-container" class="skills-container">
+        <!-- Skill groups injected by app.js -->
+        <p class="placeholder-text">Loading skills...</p>
+      </div>
+    </section>
+
+    <!-- ---- EXPERIENCE SECTION ---- -->
+    <section id="section-experience" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Experience</h2>
+        <button type="button" class="section-action-btn section-action-btn-add" data-action="add-experience" aria-label="Add experience">+</button>
+      </div>
+      <div id="experience-list" class="card-list">
+        <!-- Experience cards injected by app.js -->
+        <p class="placeholder-text">Loading experience...</p>
+      </div>
+    </section>
+
+    <!-- ---- EDUCATION SECTION ---- -->
+    <section id="section-education" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Education</h2>
+        <button type="button" class="section-action-btn section-action-btn-add" data-action="add-education" aria-label="Add education">+</button>
+      </div>
+      <div id="education-list" class="card-list">
+        <!-- Education cards injected by app.js -->
+        <p class="placeholder-text">Loading education...</p>
+      </div>
+    </section>
+
+    <!-- ---- PROJECTS SECTION ---- -->
+    <section id="section-projects" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <button type="button" class="section-action-btn section-action-btn-add" data-action="add-project" aria-label="Add project">+</button>
+      </div>
+      <div id="projects-list" class="card-list">
+        <!-- Project cards injected by app.js -->
+        <p class="placeholder-text">Loading projects...</p>
+      </div>
+    </section>
+
+    <!-- ---- AWARDS & CERTIFICATIONS SECTION ---- -->
+    <section id="section-awards" class="cv-section">
+      <div class="section-header">
+        <h2 class="section-title">Awards &amp; Certifications</h2>
+        <button type="button" class="section-action-btn section-action-btn-add" data-action="add-award" aria-label="Add award or certification">+</button>
+      </div>
+      <div id="awards-list" class="card-list">
+        <!-- Award cards injected by app.js -->
+        <p class="placeholder-text">Loading awards &amp; certifications...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content footer-content-compact">
+        <p class="footer-line"><span id="footer-name">Your Name</span> &copy; <span id="footer-year"></span></p>
+        <button class="btn-link" id="btn-admin-login" aria-label="Admin login">&#128274;</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       MODALS (hidden by default)
+  ================================================================ -->
+
+  <!-- ---- MODAL BACKDROP ---- -->
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+  <!-- ---- MODAL: Admin Login ---- -->
+  <div id="modal-login" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-login-title">
+    <div class="modal-inner">
+      <h3 id="modal-login-title" class="modal-title">Admin Login</h3>
+      <form id="form-login" novalidate>
+        <div class="form-group">
+          <label for="input-github-token">Secret key</label>
+          <input type="password" id="input-github-token" placeholder="Secret key" autocomplete="current-password" required />
+        </div>
+        <div class="form-group">
+          <label for="input-passphrase">Password</label>
+          <input type="password" id="input-passphrase" placeholder="Password" autocomplete="current-password" required />
+        </div>
+        <div class="form-error hidden" id="login-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-login">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Edit Profile ---- -->
+  <div id="modal-profile" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-profile-title">
+    <div class="modal-inner">
+      <h3 id="modal-profile-title" class="modal-title">Edit Profile</h3>
+      <form id="form-profile" novalidate>
+        <div class="form-group">
+          <label for="input-p-name">Full Name</label>
+          <input type="text" id="input-p-name" placeholder="John Doe" required />
+        </div>
+        <div class="form-group">
+          <label for="input-p-title">Job Title</label>
+          <input type="text" id="input-p-title" placeholder="Full-Stack Developer" />
+        </div>
+        <div class="form-group">
+          <label for="input-p-summary">Summary</label>
+          <textarea id="input-p-summary" rows="4" placeholder="Short description about yourself..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-p-avatar-file">Avatar</label>
+          <div class="avatar-upload-panel">
+            <div class="avatar-upload-preview-wrap">
+              <img id="avatar-upload-preview" class="avatar-upload-preview" src="default-avatar.jpg" alt="Avatar preview" />
+            </div>
+            <div class="avatar-upload-controls">
+              <input type="file" id="input-p-avatar-file" class="file-upload-input" accept="image/*" />
+              <p id="avatar-upload-status" class="upload-help-text">Upload an image file. It will be resized and compressed automatically before saving.</p>
+            </div>
+          </div>
+        </div>
+        <fieldset class="form-fieldset">
+          <legend>Contact Information</legend>
+          <div class="form-group">
+            <label for="input-p-phone">Phone Number</label>
+            <input type="tel" id="input-p-phone" placeholder="+84 000 000 000" />
+          </div>
+          <div class="form-group">
+            <label for="input-p-email">Email</label>
+            <input type="email" id="input-p-email" placeholder="email@example.com" />
+          </div>
+        </fieldset>
+        <div class="form-error hidden" id="profile-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-profile">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Add / Edit Experience ---- -->
+  <div id="modal-experience" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-experience-title">
+    <div class="modal-inner">
+      <h3 id="modal-experience-title" class="modal-title">Add Experience</h3>
+      <form id="form-experience" novalidate>
+        <input type="hidden" id="input-exp-id" />
+        <div class="form-group">
+          <label for="input-exp-company">Company</label>
+          <input type="text" id="input-exp-company" placeholder="Company Name" required />
+        </div>
+        <div class="form-group">
+          <label for="input-exp-role">Role / Title</label>
+          <input type="text" id="input-exp-role" placeholder="Software Engineer" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-exp-start">Start</label>
+            <input type="month" id="input-exp-start" required />
+          </div>
+          <div class="form-group">
+            <label for="input-exp-end">End</label>
+            <input type="month" id="input-exp-end" placeholder="Present" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-exp-desc">Description</label>
+          <textarea id="input-exp-desc" rows="5" placeholder="Responsibilities and achievements..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-exp-tech">Tech Stack Tags</label>
+          <input type="hidden" id="input-exp-tech" />
+          <div class="tag-editor-toolbar">
+            <button type="button" class="btn btn-secondary" data-action="add-exp-tech-row">+ Add Tech Tag</button>
+          </div>
+          <div id="exp-tech-editor-list" class="tag-editor-list"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-exp-logo-file">Logo / Image</label>
+          <div class="image-upload-panel image-upload-panel-sm">
+            <div class="image-upload-preview-wrap image-upload-preview-wrap-sm">
+              <img id="exp-logo-preview" class="image-upload-preview" src="default-avatar.jpg" alt="Experience logo preview" />
+            </div>
+            <div class="image-upload-controls">
+              <input type="hidden" id="input-exp-logo" />
+              <input type="file" id="input-exp-logo-file" class="file-upload-input" accept="image/*" />
+              <p id="exp-logo-status" class="upload-help-text">Upload a company logo or related image.</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-error hidden" id="experience-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn action-btn action-btn-delete hidden" id="btn-delete-experience">Delete</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-experience">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Add / Edit Project ---- -->
+  <div id="modal-project" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-project-title">
+    <div class="modal-inner">
+      <h3 id="modal-project-title" class="modal-title">Add Project</h3>
+      <form id="form-project" novalidate>
+        <input type="hidden" id="input-proj-id" />
+        <div class="form-group">
+          <label for="input-proj-name">Project Name</label>
+          <input type="text" id="input-proj-name" placeholder="Awesome App" required />
+        </div>
+        <div class="form-group">
+          <label for="input-proj-desc">Description</label>
+          <textarea id="input-proj-desc" rows="4" placeholder="What does it do?"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-proj-tech">Tech Stack Tags</label>
+          <input type="hidden" id="input-proj-tech" />
+          <div class="tag-editor-toolbar">
+            <button type="button" class="btn btn-secondary" data-action="add-proj-tech-row">+ Add Tech Tag</button>
+          </div>
+          <div id="proj-tech-editor-list" class="tag-editor-list"></div>
+        </div>
+        <div class="form-group">
+          <label>Top 3 Contributions</label>
+          <div class="contribution-editor-list">
+            <input type="text" id="input-proj-contrib-1" placeholder="Contribution 1" />
+            <input type="text" id="input-proj-contrib-2" placeholder="Contribution 2" />
+            <input type="text" id="input-proj-contrib-3" placeholder="Contribution 3" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-proj-url">Live URL</label>
+          <input type="url" id="input-proj-url" placeholder="https://..." />
+        </div>
+        <div class="form-group">
+          <label for="input-proj-repo">Repository URL</label>
+          <input type="url" id="input-proj-repo" placeholder="https://github.com/..." />
+        </div>
+        <div class="form-error hidden" id="project-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn action-btn action-btn-delete hidden" id="btn-delete-project">Delete</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-project">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Confirm Delete ---- -->
+  <div id="modal-confirm" class="modal modal-sm hidden" role="alertdialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+    <div class="modal-inner">
+      <h3 id="modal-confirm-title" class="modal-title">Confirm Delete</h3>
+      <p id="modal-confirm-message">Are you sure you want to delete this item?</p>
+      <div class="form-actions">
+        <button type="button" class="btn action-btn action-btn-delete" id="btn-confirm-yes">Delete</button>
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-confirm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Edit Summary ---- -->
+  <div id="modal-summary" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-summary-title">
+    <div class="modal-inner">
+      <h3 id="modal-summary-title" class="modal-title">Edit Summary</h3>
+      <form id="form-summary" novalidate>
+        <div class="form-group">
+          <label for="input-summary-text">Summary</label>
+          <textarea id="input-summary-text" rows="8" placeholder="Write a clear description about yourself, your strengths, and your direction..."></textarea>
+        </div>
+        <div class="form-error hidden" id="summary-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-summary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Add / Edit Education ---- -->
+  <div id="modal-education" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-education-title">
+    <div class="modal-inner">
+      <h3 id="modal-education-title" class="modal-title">Add Education</h3>
+      <form id="form-education" novalidate>
+        <input type="hidden" id="input-edu-id" />
+        <div class="form-group">
+          <label for="input-edu-school">School / University</label>
+          <input type="text" id="input-edu-school" placeholder="University of Technology" required />
+        </div>
+        <div class="form-group">
+          <label for="input-edu-degree">Degree</label>
+          <input type="text" id="input-edu-degree" placeholder="Bachelor of Science" />
+        </div>
+        <div class="form-group">
+          <label for="input-edu-field">Field of Study</label>
+          <input type="text" id="input-edu-field" placeholder="Computer Science" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-edu-start">Start</label>
+            <input type="month" id="input-edu-start" />
+          </div>
+          <div class="form-group">
+            <label for="input-edu-end">End</label>
+            <input type="month" id="input-edu-end" placeholder="Present" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-edu-gpa">GPA / Grade (optional)</label>
+          <input type="text" id="input-edu-gpa" placeholder="3.8 / 4.0" />
+        </div>
+        <div class="form-group">
+          <label for="input-edu-desc">Activities &amp; Description</label>
+          <textarea id="input-edu-desc" rows="4" placeholder="Clubs, thesis, achievements..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-edu-image-file">Education Image</label>
+          <div class="image-upload-panel image-upload-panel-sm">
+            <div class="image-upload-preview-wrap image-upload-preview-wrap-sm">
+              <img id="edu-image-preview" class="image-upload-preview" src="default-avatar.jpg" alt="Education image preview" />
+            </div>
+            <div class="image-upload-controls">
+              <input type="hidden" id="input-edu-image" />
+              <input type="file" id="input-edu-image-file" class="file-upload-input" accept="image/*" />
+              <p id="edu-image-status" class="upload-help-text">Upload a school logo or related image.</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-error hidden" id="education-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn action-btn action-btn-delete hidden" id="btn-delete-education">Delete</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-education">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Add / Edit Award & Certification ---- -->
+  <div id="modal-award" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-award-title">
+    <div class="modal-inner">
+      <h3 id="modal-award-title" class="modal-title">Add Award / Certification</h3>
+      <form id="form-award" novalidate>
+        <input type="hidden" id="input-award-id" />
+        <div class="form-group">
+          <label for="input-award-name">Name</label>
+          <input type="text" id="input-award-name" placeholder="AWS Certified Solutions Architect" required />
+        </div>
+        <div class="form-group">
+          <label for="input-award-issuer">Issuer / Organization</label>
+          <input type="text" id="input-award-issuer" placeholder="Amazon Web Services" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="input-award-issued">Issue Date</label>
+            <input type="month" id="input-award-issued" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="input-award-credential-id">Credential ID (optional)</label>
+          <input type="text" id="input-award-credential-id" placeholder="ABC-123456" />
+        </div>
+        <div class="form-group">
+          <label for="input-award-url">Credential URL (optional)</label>
+          <input type="url" id="input-award-url" placeholder="https://..." />
+        </div>
+        <div class="form-group">
+          <label for="input-award-desc">Description (optional)</label>
+          <textarea id="input-award-desc" rows="3" placeholder="Brief description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-award-image-file">Award Image</label>
+          <div class="image-upload-panel image-upload-panel-sm">
+            <div class="image-upload-preview-wrap image-upload-preview-wrap-sm">
+              <img id="award-image-preview" class="image-upload-preview" src="default-avatar.jpg" alt="Award image preview" />
+            </div>
+            <div class="image-upload-controls">
+              <input type="hidden" id="input-award-image" />
+              <input type="file" id="input-award-image-file" class="file-upload-input" accept="image/*" />
+              <p id="award-image-status" class="upload-help-text">Upload a badge, certificate, or related image.</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-error hidden" id="award-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn action-btn action-btn-delete hidden" id="btn-delete-award">Delete</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-award">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Change Passphrase ---- -->
+  <div id="modal-passphrase" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-passphrase-title">
+    <div class="modal-inner">
+      <h3 id="modal-passphrase-title" class="modal-title">Change Passphrase</h3>
+      <p class="modal-hint">This will re-encrypt the current CV data and overwrite the GitHub file with the new passphrase.</p>
+      <form id="form-passphrase" novalidate>
+        <div class="form-group">
+          <label for="input-current-passphrase">Current Passphrase</label>
+          <input type="password" id="input-current-passphrase" autocomplete="current-password" required />
+        </div>
+        <div class="form-group">
+          <label for="input-new-passphrase">New Passphrase</label>
+          <input type="password" id="input-new-passphrase" autocomplete="new-password" required />
+        </div>
+        <div class="form-group">
+          <label for="input-confirm-passphrase">Confirm New Passphrase</label>
+          <input type="password" id="input-confirm-passphrase" autocomplete="new-password" required />
+        </div>
+        <div class="form-error hidden" id="passphrase-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-passphrase">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---- MODAL: Edit Skills ---- -->
+  <div id="modal-skills" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-skills-title">
+    <div class="modal-inner">
+      <h3 id="modal-skills-title" class="modal-title">Edit Skills</h3>
+      <p class="modal-hint">Build each skill group with colored tags so you can control both label and tone.</p>
+      <form id="form-skills" novalidate>
+        <div class="skills-editor-toolbar">
+          <button type="button" class="btn btn-secondary" data-action="add-skill-row">+ Add Skill Group</button>
+        </div>
+        <div id="skills-editor-list" class="skills-editor-list">
+          <!-- Skill rows injected by app.js -->
+        </div>
+        <div class="form-error hidden" id="skills-error"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-skills">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- CryptoJS (AES encryption) — loaded from CDN -->
+    <script id="cryptojs-script"
+      defer
+      src="https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      onload="window.__cryptoJsReady = true"
+      onerror="window.__cryptoJsLoadError = true; console.error('Failed to load CryptoJS from CDN.');"></script>
+    <script defer src="app.js"></script>
+</body>
+</html>
